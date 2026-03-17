@@ -38,4 +38,6 @@ yarn-error.log*
 *.jsbundle
 *.ipa
 *.apk
-EOL
+EOL*-adminsdk-*.json
+service-account*.json
+credentials*.json
