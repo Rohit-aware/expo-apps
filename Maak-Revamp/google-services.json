@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "257410242117",
+    "project_id": "maak-revamp",
+    "storage_bucket": "maak-revamp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:257410242117:android:2ce761ad976643edce352c",
+        "android_client_info": {
+          "package_name": "com.maak.revamp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfc8adoSt2poPWL2e5l2j1FJW5a0hKUxg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

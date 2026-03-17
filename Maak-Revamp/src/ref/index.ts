@@ -1,0 +1,1 @@
+export { default as navigationRef } from './navigation-ref';

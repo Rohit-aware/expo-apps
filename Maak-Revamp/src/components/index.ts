@@ -1,0 +1,10 @@
+export { default as TakeSpace } from './common/take-space';
+export { default as InputField } from './common/input-field';
+export { default as BookingCard } from './booking-card/index';
+export { default as BottomSheet } from './bottom-sheet/index';
+export { default as ProgressBar } from './progress-bar/index';
+export { default as SerivceCard } from './common/service-card';
+export { default as BorderBottom } from './border-bottom/index';
+export { default as WhiteWrapper } from './common/white-wrapper';
+export { default as Header } from './common/header-compt/header';
+export { default as CustomButton } from './common/custom-button';
