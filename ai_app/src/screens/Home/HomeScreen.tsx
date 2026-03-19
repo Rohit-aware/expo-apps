@@ -51,7 +51,7 @@ export const HomeScreen: React.FC = () => {
         </View>
 
         <AppText variant="h1" center style={{ marginTop: theme.spacing[6] }}>
-          Claude
+          Ai Chat / Stream
         </AppText>
         <AppText
           variant="body"
@@ -59,7 +59,7 @@ export const HomeScreen: React.FC = () => {
           color={theme.colors.textSecondary}
           style={{ marginTop: theme.spacing[2], marginBottom: theme.spacing[8] }}
         >
-          AI by Anthropic
+          AI by Rohit
         </AppText>
 
         <AppButton
@@ -71,15 +71,6 @@ export const HomeScreen: React.FC = () => {
           style={{ borderRadius: theme.borderRadius['2xl'] }}
         />
       </View>
-
-      <AppText
-        variant="caption"
-        center
-        color={theme.colors.textTertiary}
-        style={{ marginBottom: theme.spacing[4] }}
-      >
-        Powered by Claude — Anthropic
-      </AppText>
     </SafeAreaView>
   );
 };

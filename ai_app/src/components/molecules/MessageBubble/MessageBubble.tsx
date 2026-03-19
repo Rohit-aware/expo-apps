@@ -1,19 +1,14 @@
-/**
- * @file components/molecules/MessageBubble/MessageBubble.tsx
- */
-
 import React, { memo } from 'react';
 import {
   View,
   StyleSheet,
-  ActivityIndicator,
   type ViewStyle,
 } from 'react-native';
 import { useTheme } from '@hooks/useTheme';
 import { AppText } from '@components/atoms/Text/AppText';
 import { formatTimestamp } from '@utils/formatters';
 import type { Message } from '@/types';
-
+import Markdown from 'react-native-markdown-display';
 interface MessageBubbleProps {
   message: Message;
 }
@@ -26,15 +21,15 @@ export const MessageBubble: React.FC<MessageBubbleProps> = memo(
     const isError = message.status === 'error';
 
     const bubbleStyle: ViewStyle = {
-      maxWidth: '82%',
+      maxWidth: '85%',
       borderRadius: theme.borderRadius.lg,
       paddingVertical: theme.spacing[3],
       paddingHorizontal: theme.spacing[4],
       backgroundColor: isUser
         ? theme.colors.userBubble
         : isError
-        ? `${theme.colors.error}22`
-        : theme.colors.assistantBubble,
+          ? `${theme.colors.error}22`
+          : theme.colors.assistantBubble,
       ...(isUser
         ? { borderBottomRightRadius: theme.borderRadius.sm }
         : { borderBottomLeftRadius: theme.borderRadius.sm }),
@@ -43,8 +38,15 @@ export const MessageBubble: React.FC<MessageBubbleProps> = memo(
     const textColor = isUser
       ? theme.colors.userBubbleText
       : isError
-      ? theme.colors.error
-      : theme.colors.assistantBubbleText;
+        ? theme.colors.error
+        : theme.colors.assistantBubbleText;
+
+    // 🔥 Append cursor directly (NO nested Text)
+    const displayText = isError
+      ? (message.error ?? 'An error occurred.')
+      : isStreaming
+        ? message.content
+        : message.content;
 
     return (
       <View
@@ -53,43 +55,53 @@ export const MessageBubble: React.FC<MessageBubbleProps> = memo(
           isUser ? styles.rowUser : styles.rowAssistant,
         ]}
       >
-        {/* Avatar for assistant */}
         {!isUser && (
           <View
             style={[
               styles.avatar,
-              { backgroundColor: theme.colors.accent, marginRight: theme.spacing[2] },
+              {
+                backgroundColor: theme.colors.accent,
+                marginRight: theme.spacing[2],
+              },
             ]}
           >
             <AppText variant="caption" bold color="#fff">
-              C
+              Ai
             </AppText>
           </View>
         )}
 
-        <View style={{ flex: 1, alignItems: isUser ? 'flex-end' : 'flex-start' }}>
+        <View
+          style={{
+            flex: 1,
+            alignItems: isUser ? 'flex-end' : 'flex-start',
+          }}
+        >
           <View style={bubbleStyle}>
-            {isStreaming && message.content === '' ? (
-              <ActivityIndicator
-                size="small"
-                color={theme.colors.accent}
-              />
-            ) : (
-              <AppText
-                variant="body"
-                color={textColor}
-                selectable
-              >
-                {isError ? (message.error ?? 'An error occurred.') : message.content}
-                {isStreaming ? (
-                  <AppText color={theme.colors.accent}> ▊</AppText>
-                ) : null}
-              </AppText>
-            )}
+            {/* {isStreaming && message.content === '' && showLoader ? (
+              <ActivityIndicator size="small" color={theme.colors.accent} />
+            ) : ( */}
+            <Markdown
+              style={{
+                body: {
+                  fontSize: theme.fontSize.base,
+                  fontFamily: theme.fontFamily.sans,
+                  color: textColor,
+                  lineHeight: theme.fontSize.base * theme.lineHeight.relaxed,
+                }
+              }}
+            >
+              {displayText}
+            </Markdown>
+            {/* )} */}
           </View>
+
           <AppText
             variant="caption"
-            style={{ marginTop: theme.spacing[1], marginHorizontal: theme.spacing[1] }}
+            style={{
+              marginTop: theme.spacing[1],
+              marginHorizontal: theme.spacing[1],
+            }}
           >
             {formatTimestamp(message.createdAt)}
           </AppText>
@@ -97,6 +109,13 @@ export const MessageBubble: React.FC<MessageBubbleProps> = memo(
       </View>
     );
   },
+  (prev, next) => {
+    return (
+      prev.message.content === next.message.content &&
+      prev.message.status === next.message.status &&
+      prev.message.error === next.message.error
+    );
+  }
 );
 
 MessageBubble.displayName = 'MessageBubble';

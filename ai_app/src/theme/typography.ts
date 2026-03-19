@@ -32,8 +32,8 @@ export const lineHeight = {
 } as const;
 
 export const fontWeight = {
-  normal: '400' as const,
-  medium: '500' as const,
-  semibold: '600' as const,
-  bold: '700' as const,
-};
+  normal: '400',
+  medium: '500',
+  semibold: '600',
+  bold: '700',
+} as const;

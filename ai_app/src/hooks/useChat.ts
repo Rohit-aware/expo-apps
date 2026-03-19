@@ -83,32 +83,59 @@ export function useChat(): UseChatReturn {
           // ---- Streaming path ----
           const generator = aiService.stream(conversation.messages, effectiveSettings);
 
+          let buffer = '';
+          let displayBuffer = '';
+          let lastFlush = Date.now();
+
+          const FLUSH_INTERVAL = 40; // tighter = smoother
+
           for await (const chunk of generator) {
-            if (abortRef.current) {
+            if (abortRef.current) break;
+
+            buffer += chunk;
+
+            // 🔥 Split into words for smoother feel
+            const words = buffer.split(/(\s+)/); // keeps spaces
+
+            if (words.length > 1) {
+              const safe = words.slice(0, -1).join('');
+              displayBuffer += safe;
+              buffer = words[words.length - 1];
+
               dispatch(
-                finalizeAssistantMessage({
+                appendStreamChunk({
                   conversationId: convId,
                   messageId: assistantMsgId,
-                  status: 'done',
+                  chunk: safe,
                 }),
               );
-              break;
+
+              lastFlush = Date.now();
             }
+
+            // fallback flush (for long words)
+            if (Date.now() - lastFlush > FLUSH_INTERVAL) {
+              dispatch(
+                appendStreamChunk({
+                  conversationId: convId,
+                  messageId: assistantMsgId,
+                  chunk: buffer,
+                }),
+              );
+
+              displayBuffer += buffer;
+              buffer = '';
+              lastFlush = Date.now();
+            }
+          }
+
+          // final flush
+          if (buffer) {
             dispatch(
               appendStreamChunk({
                 conversationId: convId,
                 messageId: assistantMsgId,
-                chunk,
-              }),
-            );
-          }
-
-          if (!abortRef.current) {
-            dispatch(
-              finalizeAssistantMessage({
-                conversationId: convId,
-                messageId: assistantMsgId,
-                status: 'done',
+                chunk: buffer,
               }),
             );
           }

@@ -10,6 +10,8 @@ import { useTheme } from '@hooks/useTheme';
 import { ChatContainer } from '@components/organisms/ChatContainer/ChatContainer';
 import { ProviderDropdown } from '@components/atoms/ProviderDropdown/ProviderDropdown';
 import { RootStackParamList } from '@/types';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Chat'>;
 
@@ -55,14 +57,20 @@ export const ChatScreen: React.FC<Props> = ({ route, navigation }) => {
   }
 
   return (
-    <ChatContainer
-      messages={conversation.messages}
-      isLoading={isLoading}
-      error={error}
-      onSend={handleSend}
-      onAbort={abortStream}
-      conversationId={conversationId}
-    />
+    <SafeAreaView
+      edges={['bottom', 'top']}
+      style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <KeyboardProvider enabled navigationBarTranslucent statusBarTranslucent preload preserveEdgeToEdge>
+        <ChatContainer
+          messages={conversation.messages}
+          isLoading={isLoading}
+          error={error}
+          onSend={handleSend}
+          onAbort={abortStream}
+          conversationId={conversationId}
+        />
+      </KeyboardProvider>
+    </SafeAreaView>
   );
 };
 

@@ -20,6 +20,9 @@
 import type { IAIProvider, AIProviderType } from '../contracts/IAIProvider';
 import { AnthropicProvider } from '../providers/anthropic';
 import { GeminiProvider } from '../providers/gemini';
+import { GptOssProvider } from '../providers/gpt-oss';
+import { KimiProvider } from '../providers/kimi';
+import { NvidiaProvider } from '../providers/nvidia';
 import { OpenAIProvider } from '../providers/openai';
 
 class AIProviderRegistry {
@@ -28,9 +31,12 @@ class AIProviderRegistry {
   constructor() {
     // ── Register all providers here ─────────────────────────────────────────
     // To add a provider: new XProvider() — that is it.
-    this.register(new AnthropicProvider());
+    this.register(new KimiProvider());
     this.register(new GeminiProvider());
     this.register(new OpenAIProvider());
+    this.register(new GptOssProvider());
+    this.register(new NvidiaProvider());
+    this.register(new AnthropicProvider());
   }
 
   /**
@@ -51,7 +57,7 @@ class AIProviderRegistry {
     if (!provider) {
       throw new Error(
         `[AIProviderRegistry] Provider "${id}" is not registered. ` +
-          `Available: ${[...this.providers.keys()].join(', ')}`,
+        `Available: ${[...this.providers.keys()].join(', ')}`,
       );
     }
     return provider;

@@ -131,7 +131,7 @@ export class AnthropicProvider extends BaseAIProvider {
       model: settings.model || ENV.ANTHROPIC_MODEL,
       max_tokens: settings.maxTokens || ENV.ANTHROPIC_MAX_TOKENS,
       system: settings.systemPrompt,
-      messages: apiMessages,
+      messages: apiMessages as any,
       temperature: settings.temperature ?? 0.7,
     };
 

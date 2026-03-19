@@ -13,6 +13,7 @@ import { ConversationsScreen } from '@screens/Conversations/ConversationsScreen'
 import { SettingsScreen } from '@screens/Settings/SettingsScreen';
 import { ChatScreen } from '@screens/Chat/ChatScreen';
 import { BottomTabParamList, RootStackParamList } from '@/types';
+import { StatusBar } from 'react-native';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -61,29 +62,32 @@ export function AppNavigator(): React.JSX.Element {
   const theme = useTheme();
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerStyle: { backgroundColor: theme.colors.surface },
-          headerTintColor: theme.colors.textPrimary,
-          headerTitleStyle: {
-            fontFamily: theme.fontFamily.sansMedium,
-            color: theme.colors.textPrimary,
-          },
-          contentStyle: { backgroundColor: theme.colors.background },
-        }}
-      >
-        <Stack.Screen
-          name="BottomTabs"
-          component={BottomTabs}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Chat"
-          component={ChatScreen}
-          options={{ title: 'Chat' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <StatusBar barStyle={'dark-content'} />
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: theme.colors.surface },
+            headerTintColor: theme.colors.textPrimary,
+            headerTitleStyle: {
+              fontFamily: theme.fontFamily.sansMedium,
+              color: theme.colors.textPrimary,
+            },
+            contentStyle: { backgroundColor: theme.colors.background },
+          }}
+        >
+          <Stack.Screen
+            name="BottomTabs"
+            component={BottomTabs}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Chat"
+            component={ChatScreen}
+            options={{ title: 'Chat' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }

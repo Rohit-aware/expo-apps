@@ -103,7 +103,6 @@ export const ConversationsScreen: React.FC = () => {
 
   return (
     <SafeAreaView
-      edges={['bottom']}
       style={[styles.root, { backgroundColor: theme.colors.background }]}
     >
       <View
