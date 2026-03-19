@@ -34,6 +34,12 @@ const EnvSchema = z.object({
     .optional()
     .default('https://generativelanguage.googleapis.com/v1beta/models'),
   GEMINI_MODEL: z.string().optional().default('gemini-1.5-flash'),
+  NVIDIA_BASE_URL: z.string().optional().default('https://api.nvidia.com/v1beta/models'),
+  NVIDIA_API_KEY: z.string().optional().default(''),
+  NVIDIA_MODEL: z.string().optional().default('google/gemma-3n-e4b-it'),
+  KIMI_BASE_URL: z.string().optional().default('https://api.nvidia.com/v1beta/models'),
+  KIMI_API_KEY: z.string().optional().default(''),
+  KIMI_MODEL: z.string().optional().default('moonshotai/kimi-k2-instruct'),
 
   // ── OpenAI (example of future provider — add key, no other changes needed) ─
   // OPENAI_API_KEY: z.string().optional().default(''),
@@ -64,6 +70,12 @@ function validateEnv(): Env {
     OPENAI_API_KEY: Config.OPENAI_API_KEY,
     OPENAI_MODEL: Config.OPENAI_MODEL,
     OPENAI_MAX_TOKENS: Config.OPENAI_MAX_TOKENS,
+    NVIDIA_BASE_URL: Config.NVIDIA_BASE_URL,
+    NVIDIA_API_KEY: Config.NVIDIA_API_KEY,
+    NVIDIA_MODEL: Config.NVIDIA_MODEL,
+    KIMI_BASE_URL: Config.KIMI_BASE_URL,
+    KIMI_API_KEY: Config.KIMI_API_KEY,
+    KIMI_MODEL: Config.KIMI_MODEL,
   };
 
   const result = EnvSchema.safeParse(raw);

@@ -10,7 +10,7 @@ import { MessageBubble } from '@components/molecules/MessageBubble/MessageBubble
 import { ChatInput } from '@components/molecules/ChatInput/ChatInput';
 import { AppText } from '@components/atoms/Text/AppText';
 import { Message } from '@/types';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardStickyView } from 'react-native-keyboard-controller';
 
 interface ChatContainerProps {
   messages: Message[];
@@ -33,12 +33,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = memo(
           listRef.current?.scrollToEnd({ animated: true });
         }, 80);
       }
-    }, [messages.length, messages[messages.length - 1]?.content]);
+    }, [messages[messages.length - 1]?.content]);
 
     const renderItem: ListRenderItem<Message> = useCallback(
       ({ item }) => <MessageBubble message={item} />,
-      [],
-    );
+      []);
 
     const keyExtractor = useCallback((item: Message) => item.id, []);
 
@@ -59,7 +58,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = memo(
     );
 
     return (
-      <SafeAreaView
+      <View
         style={[styles.container, { backgroundColor: theme.colors.background }]}
       >
         <FlatList
@@ -67,17 +66,21 @@ export const ChatContainer: React.FC<ChatContainerProps> = memo(
           data={messages}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
-          ListEmptyComponent={EmptyComponent}
+
+          removeClippedSubviews
+          initialNumToRender={12}
+          maxToRenderPerBatch={6}
+          windowSize={7}
+
+          updateCellsBatchingPeriod={16}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+
           contentContainerStyle={[
             styles.listContent,
             messages.length === 0 && styles.emptyListContent,
           ]}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          removeClippedSubviews
-          maxToRenderPerBatch={10}
-          windowSize={10}
-          initialNumToRender={20}
+          ListEmptyComponent={EmptyComponent}
         />
 
         {/* Error banner */}
@@ -88,18 +91,24 @@ export const ChatContainer: React.FC<ChatContainerProps> = memo(
               { backgroundColor: `${theme.colors.error}22` },
             ]}
           >
-            <AppText variant="bodySmall" color={theme.colors.error}>
+            <AppText variant="bodySmall" color={theme.colors.error} selectable>
               {error}
             </AppText>
           </View>
         )}
-
-        <ChatInput
-          onSend={onSend}
-          onAbort={onAbort}
-          isLoading={isLoading}
-        />
-      </SafeAreaView>
+        <KeyboardStickyView
+          enabled
+          removeClippedSubviews
+          needsOffscreenAlphaCompositing
+          offset={{ opened: 50 }}
+        >
+          <ChatInput
+            onSend={onSend}
+            onAbort={onAbort}
+            isLoading={isLoading}
+          />
+        </KeyboardStickyView>
+      </View>
     );
   },
 );
@@ -111,7 +120,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingTop: 16,
     paddingBottom: 8,
   },
   emptyListContent: {
@@ -124,7 +132,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   errorBanner: {
-    marginHorizontal: 16,
     marginBottom: 8,
     borderRadius: 8,
     paddingVertical: 8,

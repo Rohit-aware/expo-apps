@@ -107,8 +107,8 @@ export const ChatInput: React.FC<ChatInputProps> = memo(
                   isLoading
                     ? theme.colors.error
                     : canSend
-                    ? theme.colors.accent
-                    : theme.colors.surfaceElevated,
+                      ? theme.colors.accent
+                      : theme.colors.surfaceElevated,
               },
             ]}
             onPress={isLoading ? handleAbort : handleSend}
@@ -123,7 +123,7 @@ export const ChatInput: React.FC<ChatInputProps> = memo(
                 bold
                 color={canSend ? '#fff' : theme.colors.textDisabled}
               >
-                ↑
+                send
               </AppText>
             )}
           </TouchableOpacity>

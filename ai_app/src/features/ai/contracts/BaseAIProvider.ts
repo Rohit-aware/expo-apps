@@ -44,15 +44,29 @@ export abstract class BaseAIProvider implements IAIProvider {
   /**
    * Strips system messages and unfinished assistant turns so every provider
    * receives a clean [user, assistant, user, …] sequence.
+   * Enforces alternating roles by merging consecutive messages of the same role.
    */
   protected toConversationMessages(messages: Message[]): ConversationMessage[] {
-    return messages
+    const filtered = messages
       .filter((m) => m.role === 'user' || m.role === 'assistant')
-      .filter((m) => m.status === 'done' || m.role === 'user')
-      .map((m) => ({
-        role: m.role as 'user' | 'assistant',
-        content: m.content,
-      }));
+      .filter((m) => m.status === 'done' || m.role === 'user');
+
+    const result: ConversationMessage[] = [];
+
+    for (const msg of filtered) {
+      const last = result[result.length - 1];
+      if (last && last.role === msg.role) {
+        // Merge consecutive messages of the same role
+        last.content = `${last.content}\n\n${msg.content}`;
+      } else {
+        result.push({
+          role: msg.role as 'user' | 'assistant',
+          content: msg.content,
+        });
+      }
+    }
+
+    return result;
   }
 
   /** Structured logger scoped to this provider's tag. */

@@ -23,7 +23,7 @@ import type { Message, AISettings, ApiResult } from '@/types';
 // ─────────────────────────────────────────────────────────────────────────────
 
 /** Stable string literal union — extend here when adding a new provider. */
-export type AIProviderType = 'anthropic' | 'gemini' | 'openai';
+export type AIProviderType = 'gpt-oss' | 'anthropic' | 'gemini' | 'openai' | 'nvidia' | 'kimi';
 
 /** Metadata exposed to the Settings / Dropdown UI. */
 export interface AIProviderMeta {

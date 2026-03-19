@@ -50,8 +50,8 @@ export interface AISettings {
 }
 
 export const DEFAULT_AI_SETTINGS: AISettings = {
-  provider: 'openai',
-  model: 'gpt-4o-mini',
+  provider: 'gpt-oss',
+  model: 'gpt-oss-120b',
   maxTokens: 1024,
   temperature: 0.7,
   systemPrompt: 'You are a helpful AI assistant.',

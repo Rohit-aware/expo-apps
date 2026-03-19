@@ -91,10 +91,10 @@ export class OpenAIProvider extends BaseAIProvider {
     settings: AISettings,
   ): Promise<ApiResult<string>> {
     const model = settings.model || OPENAI_META.defaultModel;
+    const url = `${ENV.OPENAI_BASE_URL}/chat/completions`;
+    this.log.debug('complete', { model, url });
 
-    this.log.debug('complete', { model });
-
-    const response = await fetch(ENV.OPENAI_BASE_URL, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: buildHeaders(ENV.OPENAI_API_KEY),
       body: JSON.stringify({
@@ -132,10 +132,10 @@ export class OpenAIProvider extends BaseAIProvider {
     settings: AISettings,
   ): AsyncGenerator<string, void, unknown> {
     const model = ENV.OPENAI_MODEL || settings.model;
+    const url = `${ENV.OPENAI_BASE_URL}/chat/completions`;
+    this.log.debug('stream start', { model, url });
 
-    this.log.debug('stream start', { model });
-
-    const response = await fetch(ENV.OPENAI_BASE_URL, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: buildHeaders(ENV.OPENAI_API_KEY),
       body: JSON.stringify({

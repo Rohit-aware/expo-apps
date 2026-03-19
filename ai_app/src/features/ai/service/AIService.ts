@@ -35,10 +35,7 @@ export class AIService {
    * One-shot (non-streaming) completion.
    * Delegates to the provider resolved from `settings.provider`.
    */
-  async complete(
-    messages: Message[],
-    settings: AISettings,
-  ): Promise<ApiResult<string>> {
+  async complete(messages: Message[], settings: AISettings,): Promise<ApiResult<string>> {
     const provider = this.resolveProvider(settings);
     Logger.debug(TAG, 'complete', { provider: provider.meta.id });
     return provider.complete(messages, settings);
@@ -49,10 +46,7 @@ export class AIService {
    * Yields text chunks as they arrive.
    * Delegates to the provider resolved from `settings.provider`.
    */
-  async *stream(
-    messages: Message[],
-    settings: AISettings,
-  ): AsyncGenerator<string, void, unknown> {
+  async *stream(messages: Message[], settings: AISettings,): AsyncGenerator<string, void, unknown> {
     const provider = this.resolveProvider(settings);
     Logger.debug(TAG, 'stream', { provider: provider.meta.id });
     yield* provider.stream(messages, settings);
